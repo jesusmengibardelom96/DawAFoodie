@@ -3,21 +3,21 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
-    <ion-title>SignIn</ion-title>
+    <ion-title>SignUp</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-text-center">
   <ion-item class="inputs">
     <ion-label position="floating">e-Mail</ion-label>
-    <ion-input type="email" placeholder="test@testMail.com"></ion-input>
+    <ion-input type="text" placeholder="test@testMail.com" [(ngModel)] = "mail"></ion-input>
   </ion-item>
   <ion-item class="inputs">
     <ion-label position="floating">Password</ion-label>
-    <ion-input type="password" placeholder="Type your password..."></ion-input>
+    <ion-input type="password" placeholder="Type your password..." [(ngModel)] = "password"></ion-input>
   </ion-item>
-  <ion-button class="buttons" expand="block">
-    <ion-label>Sign In</ion-label>
+  <ion-button class="buttons" expand="block" (click)="signUp()">
+    <ion-label>SignUp</ion-label>
   </ion-button>
-  <ion-label>You had an account already?</ion-label><a> Login here</a>
+  <ion-label>You had an account already?</ion-label><a (click)="signIn()"> SignIn here</a>
 </ion-content>

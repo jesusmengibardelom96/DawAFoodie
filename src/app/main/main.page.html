@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+    <ion-buttons slot="start">
+      <ion-button *ngIf = "this.user === null; else elseBlock" (click)="logIn()">{{nameButton}}</ion-button>
+      <ng-template #elseBlock>
+        <ion-button (click)="logOut()">{{nameButton}}</ion-button>
+      </ng-template>
+    </ion-buttons>
+    <ion-title>main</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p>Welcome {{email}}</p>
+</ion-content>

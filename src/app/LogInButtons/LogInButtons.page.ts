@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthServiceService } from '../services/auth-service.service';
 
 @Component({
   selector: 'app-LogInButtons',
@@ -7,6 +9,21 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(private router: Router, private afAuth: AuthServiceService) {}
+  
+  ngOnInit(){
 
+  }
+  facebookLogIn(){
+    this.afAuth.doFacebookLogin();
+  }
+  googleLogIn(){
+    this.afAuth.doGoogleLogin();
+  }
+  signUp(){
+    this.router.navigateByUrl("register");
+  }
+  signIn(){
+    this.router.navigateByUrl("login-mail");
+  }
 }
