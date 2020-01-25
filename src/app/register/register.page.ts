@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
     this.afAuth.createUser(this.mail, this.password)
     .then(() => {
       let user = {
-        email: this.mail,
+        mail: this.mail,
         password: this.password
       };
       sessionStorage.setItem("userLoggedin", JSON.stringify(user));

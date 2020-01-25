@@ -21,7 +21,7 @@ export class AuthServiceService {
           resolve(res);
           this.router.navigateByUrl("main");
           let user = {
-            email: res.user.email
+            mail: res.user.email
           };
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
           console.log(res);
@@ -43,7 +43,7 @@ export class AuthServiceService {
           resolve(res);
           this.router.navigateByUrl("main");
           let user = {
-            email: res.user.email
+            mail: res.user.email
           };
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
         })

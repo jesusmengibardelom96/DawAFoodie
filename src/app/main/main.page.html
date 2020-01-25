@@ -6,10 +6,40 @@
         <ion-button (click)="logOut()">{{nameButton}}</ion-button>
       </ng-template>
     </ion-buttons>
-    <ion-title>main</ion-title>
+    <ion-buttons slot="end" *ngIf="this.items !== null; else elseBlock3">
+      <ion-button (click)="hideOn()"><ion-icon name="options"></ion-icon></ion-button>
+    </ion-buttons>
+    <ng-template #elseBlock3>
+      <ion-buttons slot="end">
+        <ion-button><ion-icon name="options"></ion-icon></ion-button>
+      </ion-buttons>
+    </ng-template>
+    <ion-title>Restaurants</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<ion-searchbar [hidden]="hideObject" [(ngModel)]="searchTerm"
+(ionChange)="filteredArray()" placeholder="Name or Type"></ion-searchbar>
+<ion-item [hidden]="hideObject">
+  <ion-checkbox class="check" [(ngModel)]="searchTermChck" (ionChange)="setFilteredItems2()"></ion-checkbox>
+  <ion-label class="labelCheck"> Visited?Y/N</ion-label>
+</ion-item>
 <ion-content>
-  <p>Welcome {{email}}</p>
+  <ion-list *ngIf="this.email !== 'random user' || this.items !== null; else elseBlock2">
+      <ion-item *ngFor="let item of newItems">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>{{item.type}}</ion-card-subtitle>
+            <ion-card-title>{{item.name}}</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Keep close to Nature's heart... and break clear away, once in awhile,
+            and climb a mountain or spend a week in the woods. Wash your spirit clean.
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+  </ion-list>
+  <ng-template #elseBlock2>
+    <ion-label class="labels">Hey do you want add some restaurants? LogIn and tell us about that</ion-label>
+  </ng-template>
 </ion-content>

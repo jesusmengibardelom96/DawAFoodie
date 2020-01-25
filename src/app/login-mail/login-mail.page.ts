@@ -51,7 +51,7 @@ export class LoginMailPage implements OnInit {
     this.afAuth.loginUser(this.mail, this.password)
     .then(() => {
       let user = {
-        email: this.mail,
+        mail: this.mail,
         password: this.password
       };
       sessionStorage.setItem("userLoggedin", JSON.stringify(user));
