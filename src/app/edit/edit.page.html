@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center" color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="noEdition()"><ion-icon name="arrow-round-back"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-title>Editing {{restaurant.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="buttons">
+    <ion-label position="floating">New name: </ion-label>
+    <ion-input placeholder="{{restaurant.name}}" [(ngModel)]="newName"></ion-input>
+  </ion-item>
+  <ion-item class="buttons">
+    <ion-label position="floating">New type: </ion-label>
+    <ion-input placeholder="{{restaurant.type}}" [(ngModel)]="newType"></ion-input>
+  </ion-item>
+  <ion-item class="buttons">
+    <ion-label>Price range</ion-label>
+    <ion-select placeholder="{{restaurant.priceRange}}" [(ngModel)]="newPrice">
+      <ion-select-option value="15-30">15-30</ion-select-option>
+      <ion-select-option value="30-45">30-45</ion-select-option>
+      <ion-select-option value=">45">>45</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item class="buttons">
+    <ion-label position="floating">New district: </ion-label>
+    <ion-input placeholder="{{restaurant.district}}" [(ngModel)]="newDistrict"></ion-input>
+  </ion-item>
+  <ion-button expand="block" class="buttons">
+    <ion-icon name="cloud-upload"></ion-icon>
+    <ion-label class="inputLabels">Upload photo</ion-label>
+  </ion-button>
+  <ion-button expand="block" class="buttons">
+    <ion-icon name="cloud-upload"></ion-icon>
+    <ion-label class="inputLabels">Upload logo</ion-label>
+  </ion-button>
+  <ion-button expand="block" class="buttons" color="success" (click)="sendToMain()">
+    <ion-label class="inputLabels">Save</ion-label>
+  </ion-button>
+</ion-content>
