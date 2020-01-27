@@ -1,47 +1,49 @@
 <ion-header>
   <ion-toolbar class="ion-text-center" color="secondary">
     <ion-buttons slot="start">
-      <ion-button (click)="noEdition()"><ion-icon name="arrow-round-back"></ion-icon></ion-button>
+      <ion-button (click)="backMain()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-title>Editing {{restaurant.name}}</ion-title>
+    <ion-title>Add new restaurant</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-text-center">
   <ion-item class="buttons">
-    <ion-label position="floating">New name: </ion-label>
-    <ion-input placeholder="{{restaurant.name}}" [(ngModel)]="newName"></ion-input>
+    <ion-label position="floating"> Name: </ion-label>
+    <ion-input placeholder="Put the name of the restaurant" [(ngModel)]="name"></ion-input>
   </ion-item>
   <ion-item class="buttons">
-    <ion-label position="floating">New type: </ion-label>
-    <ion-input placeholder="{{restaurant.type}}" [(ngModel)]="newType"></ion-input>
+    <ion-label position="floating"> Type: </ion-label>
+    <ion-input placeholder="Put the type of the restaurant" [(ngModel)]="type"></ion-input>
   </ion-item>
   <ion-item class="buttons">
     <ion-label>Price range</ion-label>
-    <ion-select placeholder="{{restaurant.priceRange}}" [(ngModel)]="newPrice">
+    <ion-select placeholder="Put the price" [(ngModel)]="price">
       <ion-select-option value="15-30">15-30</ion-select-option>
       <ion-select-option value="30-45">30-45</ion-select-option>
       <ion-select-option value=">45">>45</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item class="buttons">
-    <ion-label position="floating">New district: </ion-label>
-    <ion-input placeholder="{{restaurant.district}}" [(ngModel)]="newDistrict"></ion-input>
+    <ion-label position="floating"> District: </ion-label>
+    <ion-input placeholder="Put the district of the restaurant" [(ngModel)]="district"></ion-input>
   </ion-item>
   <ion-item class="buttons">
-    <ion-checkbox class="check" [(ngModel)]="newVisited"></ion-checkbox>
+    <ion-checkbox class="check" [(ngModel)]="visited"></ion-checkbox>
     <ion-text class="labelCheck"> Visited?Y/N</ion-text>
   </ion-item>
   <ion-item class="buttons">
     <ion-text class="textArea">
       Put your commentary:
-      <ion-textarea [(ngModel)]="newComment" placeholder="{{restaurant.comment}}"></ion-textarea>
+      <ion-textarea></ion-textarea>
     </ion-text>
   </ion-item>
-  <ion-item class="buttons" *ngIf="newVisited">
+  <ion-item class="buttons" *ngIf="visited">
     <ion-text class="textArea">
       Put your opinion:
-      <ion-textarea [(ngModel)]="newOpinion" placeholder="{{restaurant.opinion}}"></ion-textarea>
+      <ion-textarea></ion-textarea>
     </ion-text>
   </ion-item>
   <ion-button expand="block" class="buttons">

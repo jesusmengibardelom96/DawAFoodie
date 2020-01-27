@@ -13,6 +13,9 @@ export class EditPage implements OnInit {
   newType: string = "";
   newPrice: string = "";
   newDistrict: string = "";
+  newVisited: boolean = false;
+  newComment: string = "";
+  newOpinion: string = "";
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
@@ -21,7 +24,12 @@ export class EditPage implements OnInit {
     });
   }
   ionViewDidEnter() {
-
+    if(this.restaurant.opinion.trim() === ""){
+      this.restaurant.opinion = "Leave us here your opinion of this restaurant..."
+    }
+    if(this.restaurant.comment.trim() === ""){
+      this.restaurant.comment = "Leave us here your commentary of this restaurant..."
+    }
   }
   sendToMain() {
     if (this.newName.trim() === "") {
@@ -36,15 +44,23 @@ export class EditPage implements OnInit {
     if (this.newDistrict.trim() === "") {
       this.newDistrict = this.restaurant.district;
     }
+    if(this.restaurant.opinion.trim() === ""){
+      this.restaurant.opinion = "";
+      this.newOpinion = this.restaurant.opinion;
+    }
+    if(this.restaurant.comment.trim() === ""){
+      this.restaurant.comment = "";
+      this.newComment = this.restaurant.comment;
+    }
     this.restaurantEdited = {
       mail: this.restaurant.mail,
       name: this.newName,
       type: this.newType,
-      visited: this.restaurant.visited,
+      visited: this.newVisited,
       photo: "",
       logo: "",
-      comment: "",
-      opinion: "",
+      comment: this.newComment,
+      opinion: this.newOpinion,
       priceRange: this.newPrice,
       district: this.newDistrict,
       editado: true

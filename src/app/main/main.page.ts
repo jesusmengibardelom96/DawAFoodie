@@ -224,4 +224,8 @@ export class MainPage implements OnInit {
   helpModal(){
     this.presentAlert();
   }
+
+  addItem(){
+    this.router.navigateByUrl("add");
+  }
 }
