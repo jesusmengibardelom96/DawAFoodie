@@ -69,10 +69,7 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
-  <ng-template #elseBlock2>
-    <ion-label class="labels">Hey do you want add some restaurants? LogIn and tell us about that</ion-label>
-  </ng-template>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="this.email !== 'random user' || this.items !== null">
     <ion-fab-button>
       <ion-icon name="more"></ion-icon>
     </ion-fab-button>
@@ -83,4 +80,8 @@
       <ion-fab-button (click)="helpModal()"><ion-icon name="help"></ion-icon></ion-fab-button>
     </ion-fab-list>
   </ion-fab>
+  <ng-template #elseBlock2>
+    <ion-label class="labels">Hey do you want add some restaurants? LogIn and tell us about that</ion-label>
+  </ng-template>
+  
 </ion-content>

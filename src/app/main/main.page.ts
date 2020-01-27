@@ -24,6 +24,8 @@ export class MainPage implements OnInit {
   edited: boolean;
   restaurantEdited: any;
   priceRange: string;
+  addingItem: boolean;
+  addRestaurant: any;
   constructor(public alert: AlertController, private afAuth: AuthServiceService, private router: Router, private restaurants: RestaurantsService, private route: ActivatedRoute) {
     this.email = "random user";
   }
@@ -37,35 +39,29 @@ export class MainPage implements OnInit {
         mail: "random user"
       };
     }
-    /*this.route.params.subscribe(params =>{
-      this.edited = params['edited'];
-    });*/
-
-
-    /*
-    if(this.restaurant.priceRange.includes("15-30")){
-      this.priceRange = "€";
-    }else if(this.restaurant.priceRange.includes("30-45")){
-      this.priceRange = "€€";
-    }else if(this.restaurant.priceRange.includes(">45")){
-      this.priceRange = "€€€";
-    }else{
-      this.priceRange = "Undetermined";
-    }
-    */
+    this.edited = undefined;
+    this.addingItem = undefined;
   }
 
   ionViewDidEnter() {
     this.edited = undefined;
+    this.addingItem = undefined;
     this.newItems = [];
+    //sessionStorage.setItem("itemsViejos", JSON.stringify(this.newItems));
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if(JSON.parse(sessionStorage.getItem("itemEditado")) !== null){
       this.restaurantEdited = JSON.parse(sessionStorage.getItem("itemEditado"));
       this.edited = this.restaurantEdited.editado;
     }
+    if(JSON.parse(sessionStorage.getItem("ItemAdd")) !== null){
+      this.addRestaurant = JSON.parse(sessionStorage.getItem("ItemAdd"));
+      this.addingItem = this.addRestaurant.added;
+    }
+    console.log(this.addingItem);
     if (this.user !== null) {
       this.email = this.user.mail;
       this.items = this.restaurants.getData();
+      
       for (let item of this.items) {
         if (this.user.mail === item.mail) {
           if (this.edited === true) {
@@ -91,6 +87,32 @@ export class MainPage implements OnInit {
             console.log("Editado = " + this.edited);
             this.newItems = JSON.parse(sessionStorage.getItem("itemsEditados"));
             this.filterArray = JSON.parse(sessionStorage.getItem("itemsEditados"));
+          } else if (this.addingItem === true) {
+            console.log("Entro en añadir item: ");
+            this.newItems = JSON.parse(sessionStorage.getItem("itemsViejos"));
+            this.filterArray = JSON.parse(sessionStorage.getItem("itemsViejos"));
+            let restaurantSession = {
+              mail: this.addRestaurant.mail,
+              name: this.addRestaurant.name,
+              type: this.addRestaurant.type,
+              visited: this.addRestaurant.visited,
+              photo: this.addRestaurant.photo,
+              logo: this.addRestaurant.logo,
+              comment: this.addRestaurant.comment,
+              opinion: this.addRestaurant.opinion,
+              priceRange: this.addRestaurant.priceRange,
+              district: this.addRestaurant.district
+            }
+            console.log(restaurantSession);
+            this.filterArray.push(restaurantSession);
+            console.log(this.filterArray);
+            this.newItems.push(restaurantSession);
+            sessionStorage.setItem("itemsViejos", JSON.stringify(this.newItems));
+            console.log(this.newItems);
+            //sessionStorage.setItem("itemsEditados", JSON.stringify(this.newItems));
+            this.addingItem = false;
+            this.valueOfPriceRange(restaurantSession);
+            sessionStorage.removeItem("ItemAdd");
           } else {
             console.log("Editado = " + this.edited);
             this.newItems.push(item);
@@ -103,7 +125,6 @@ export class MainPage implements OnInit {
     } else {
       this.nameButton = "Log in";
     }
-    
   }
 
   logOut() {
@@ -111,6 +132,7 @@ export class MainPage implements OnInit {
     sessionStorage.removeItem("itemsEditados");
     sessionStorage.removeItem("itemsViejos");
     sessionStorage.removeItem("itemEditado");
+    sessionStorage.removeItem("ItemAdd");
     this.newItems = [];
     this.router.navigateByUrl("home");
     this.afAuth.signoutUser();
@@ -190,7 +212,6 @@ export class MainPage implements OnInit {
   }
   goToEdit(item) {
     this.edited = true;
-    sessionStorage.setItem("itemsViejos", JSON.stringify(this.newItems));
     this.router.navigate(['/edit', { restaurant: JSON.stringify(item) }]);
     const index = this.filterArray.findIndex(order => order.name === item.name);
     this.filterArray.splice(index, 1);
@@ -226,6 +247,6 @@ export class MainPage implements OnInit {
   }
 
   addItem(){
-    this.router.navigateByUrl("add");
+    this.router.navigate(["/add", { mail: JSON.stringify(this.email) }]);
   }
 }
