@@ -33,7 +33,7 @@
 
 <ion-content>
   <ion-list *ngIf="this.email !== 'random user' || this.items !== null; else elseBlock2">
-    <ion-item-sliding *ngFor="let item of newItems">
+    <ion-item-sliding *ngFor="let item of items">
       <ion-item-options side="start">
         <ion-item-option color="secondary" (click)="goToEdit(item)">
           <ion-icon slot="top" name="create"></ion-icon>
@@ -53,14 +53,14 @@
             <ion-card-title>{{item.name}}</ion-card-title>
           </ion-card-header>
         
-          <ion-card-content *ngIf="this.priceRange === '€'">
+          <ion-card-content *ngIf="item.priceRange === '15-30'">
             <ion-icon name="logo-euro"></ion-icon>
           </ion-card-content>
-          <ion-card-content *ngIf="this.priceRange === '€€'">
+          <ion-card-content *ngIf="item.priceRange === '30-45'">
             <ion-icon name="logo-euro"></ion-icon>
             <ion-icon name="logo-euro"></ion-icon>
           </ion-card-content>
-          <ion-card-content *ngIf="this.priceRange === '€€€'">
+          <ion-card-content *ngIf="item.priceRange === '>45'">
             <ion-icon name="logo-euro"></ion-icon>
             <ion-icon name="logo-euro"></ion-icon>
             <ion-icon name="logo-euro"></ion-icon>
@@ -69,7 +69,10 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="this.email !== 'random user' || this.items !== null">
+  <ng-template #elseBlock2>
+    <ion-label class="labels">Hey do you want add some restaurants? LogIn and tell us about that</ion-label>
+  </ng-template>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="more"></ion-icon>
     </ion-fab-button>
@@ -80,8 +83,4 @@
       <ion-fab-button (click)="helpModal()"><ion-icon name="help"></ion-icon></ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-  <ng-template #elseBlock2>
-    <ion-label class="labels">Hey do you want add some restaurants? LogIn and tell us about that</ion-label>
-  </ng-template>
-  
 </ion-content>

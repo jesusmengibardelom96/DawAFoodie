@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Restaurants } from '../models/restaurants.interface';
 import { RESTAURANTS } from '../data/data.restaurants';
+import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantsService {
-  private items: Restaurants[] = RESTAURANTS.slice(0);
-  constructor() { }
+  private items: Restaurants[];
+  constructor(private db: FirestoreService) {
+    this.items = JSON.parse(sessionStorage.getItem('restaurants'));
+  }
 
-  getData(){
+  getData() {
     return this.items;
   }
 
-  filterItems(searchTerm) {
-    return this.items.filter(item => {
-      return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-    }, item =>{
-      return item.type.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-    });
-  }
 }

@@ -37,13 +37,13 @@
   <ion-item class="buttons">
     <ion-text class="textArea">
       Put your commentary:
-      <ion-textarea [(ngModel)]="comment" placeholder="Put your comment here..."></ion-textarea>
+      <ion-textarea [(ngModel)]="comment" placeholder="{{placeHolderComment}}"></ion-textarea>
     </ion-text>
   </ion-item>
   <ion-item class="buttons" *ngIf="visited">
     <ion-text class="textArea">
       Put your opinion:
-      <ion-textarea [(ngModel)]="opinion" placeholder="Put your opinion here..."></ion-textarea>
+      <ion-textarea [(ngModel)]="opinion" placeholder="{{placeHolderOpinion}}"></ion-textarea>
     </ion-text>
   </ion-item>
   <ion-button expand="block" class="buttons">

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-edit',
@@ -16,7 +17,7 @@ export class EditPage implements OnInit {
   newVisited: boolean = false;
   newComment: string = "";
   newOpinion: string = "";
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router, private fire : FirestoreService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -53,6 +54,7 @@ export class EditPage implements OnInit {
       this.newComment = this.restaurant.comment;
     }
     this.restaurantEdited = {
+      id: this.restaurant.id,
       mail: this.restaurant.mail,
       name: this.newName,
       type: this.newType,
@@ -62,14 +64,14 @@ export class EditPage implements OnInit {
       comment: this.newComment,
       opinion: this.newOpinion,
       priceRange: this.newPrice,
-      district: this.newDistrict,
-      editado: true
+      district: this.newDistrict
     }
-    sessionStorage.setItem("itemEditado", JSON.stringify(this.restaurantEdited));
+    /* sessionStorage.setItem("itemEditado", JSON.stringify(this.restaurantEdited));
     this.newName = "";
     this.newType = "";
     this.newPrice = "";
-    this.newDistrict = "";
+    this.newDistrict = ""; */
+    this.fire.actualizarDatabase(this.restaurantEdited, this.restaurant);
     this.router.navigateByUrl("main");
   }
 
