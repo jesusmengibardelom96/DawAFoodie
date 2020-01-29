@@ -1,4 +1,5 @@
 export interface Restaurants{
+    id: string;
     mail : string;
     name: string;
     type: string;

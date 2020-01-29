@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthServiceService } from '../services/auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RestaurantsService } from '../services/restaurants.service';
 import { AlertController } from '@ionic/angular';
 import { FirestoreService } from '../services/firestore.service';
 import { Restaurants } from '../models/restaurants.interface';
@@ -13,24 +12,27 @@ import { Restaurants } from '../models/restaurants.interface';
 })
 export class MainPage implements OnInit {
   user: any = null;
+  deleteResta: any = null;
+  delete: boolean = false;
   email: string;
   nameButton: string = "";
   hideObject: boolean = true;
   searchTerm: string = "";
-  items: any[] = [];
+  items: Restaurants[] = [];
   searchTermChck: boolean = null;
   filterArray: any[] = [];
   priceRange: string;
   filterActivated: boolean = false;
-  constructor(public alert: AlertController, private afAuth: AuthServiceService, private router: Router, private restaurants: RestaurantsService, private route: ActivatedRoute, private fire: FirestoreService) {
+  constructor(public alert: AlertController, private afAuth: AuthServiceService, private router: Router, private route: ActivatedRoute, private fire: FirestoreService) {
     this.email = "random user";
   }
 
   ngOnInit() {
-    console.log(this.user);
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
+      this.items = this.fire.getCollection(this.email);
+      this.filterArray = this.items;
     } else {
       this.user = {
         mail: "random user"
@@ -40,13 +42,14 @@ export class MainPage implements OnInit {
 
   ionViewDidEnter() {
     this.user = null;
-    this.items = this.fire.removeArray();
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
-      this.items = this.fire.getCollection(this.email);
-      this.filterArray = this.items;
-      console.log(this.items);
+      if(this.deleteResta === true){
+        this.items = this.fire.removeArray();
+        this.items = this.fire.getCollection(this.email);
+        this.deleteResta = false;
+      }
       this.nameButton = "Log out"
     } else {
       this.nameButton = "Log in";
@@ -82,7 +85,7 @@ export class MainPage implements OnInit {
 
   filterItems(){
     let arrayTest = [];
-    this.items = this.fire.removeArray();
+    this.items = [];
     for (let i of this.filterArray) {
       if(this.filterActivated === true){
         if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
@@ -97,6 +100,7 @@ export class MainPage implements OnInit {
 
   goToEdit(item) {
     this.router.navigate(['/edit', { restaurant: JSON.stringify(item) }]);
+    this.deleteResta = true;
   }
 
   resetItems(){
@@ -104,16 +108,16 @@ export class MainPage implements OnInit {
     this.searchTermChck = false;
     this.filterActivated = false;
     this.items = this.filterArray;
+    console.log(this.filterArray);
   }
 
   deleteItem(item){
-    this.fire.removeARestaurant(item.id);
-    const index = this.items.findIndex(order => order.id === item.id);
-    this.items.splice(index, 1);
-    console.log(this.items);
     const index2 = this.filterArray.findIndex(order => order.name === item.name);
     this.filterArray.splice(index2, 1);
-    console.log(this.items);
+    const index = this.items.findIndex(order => order.id === item.id);
+    this.items.splice(index, 1);
+    this.fire.removeArray();
+    this.fire.removeARestaurant(item.id);
   }
 
   async presentAlert() {
@@ -133,6 +137,7 @@ export class MainPage implements OnInit {
   addItem(){
     console.log(this.email);
     this.router.navigate(['/add', { mail: JSON.stringify(this.email) }]);
+    this.deleteResta = true;
   }
 
   goToLoginPage(){

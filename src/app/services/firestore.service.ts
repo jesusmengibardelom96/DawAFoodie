@@ -22,10 +22,10 @@ export class FirestoreService {
       res => {
         res.forEach(element => {
           if(mail === element.Restaurants.mail)this.restaurants.push(element.Restaurants);
-          
         })
       }
     );
+    
     return this.restaurants;
   }
 
