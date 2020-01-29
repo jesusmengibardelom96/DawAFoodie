@@ -16,4 +16,13 @@ export class ToastService {
     });
     toast.present();
   }
+  async presentToastCenter(mensaje:string, color:string, duration:number) {
+    const toast = await this.toast.create({
+      message: mensaje,
+      duration: duration,
+      position: 'middle',
+      color: color
+    });
+    toast.present();
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirestoreService } from '../services/firestore.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-add',
@@ -18,7 +19,7 @@ export class AddPage implements OnInit {
   email: string;
   placeHolderComment:string;
   placeHolderOpinion:string;
-  constructor(private router : Router, private fire: FirestoreService, private route : ActivatedRoute) { }
+  constructor(private router : Router, private fire: FirestoreService, private route : ActivatedRoute, private toast: ToastService) { }
 
   ngOnInit() {
     this.placeHolderComment = "Place your comment here...";
@@ -32,20 +33,25 @@ export class AddPage implements OnInit {
     this.router.navigateByUrl("main");
   }
   sendToMain(){
-    let addingRestaurants = {
-      id: this.fire.createId(),
-      mail: this.email,
-      name: this.name,
-      type: this.type,
-      priceRange: this.price,
-      district: this.district,
-      visited: this.visited,
-      photo: "",
-      logo: "",
-      comment: this.comment,
-      opinion: this.opinion
-    };
-    this.fire.createAnObject(addingRestaurants);
-    this.backMain();
+    if(this.name.trim() === "" || this.type.trim() === "" || this.price.trim() === "" || this.district.trim() === "" ){
+      this.toast.presentToast("You can't save a restaurant that dont have name, type, price or district, please fill the fields and try again", "danger", 5000);
+    }else{
+      let addingRestaurants = {
+        id: this.fire.createId(),
+        mail: this.email,
+        name: this.name,
+        type: this.type,
+        priceRange: this.price,
+        district: this.district,
+        visited: this.visited,
+        photo: "",
+        logo: "",
+        comment: this.comment,
+        opinion: this.opinion
+      };
+      this.fire.createAnObject(addingRestaurants);
+      this.toast.presentToast("This restaurant has been successfully created ", "success", 2000);
+      this.backMain();
+    }
   }
 }

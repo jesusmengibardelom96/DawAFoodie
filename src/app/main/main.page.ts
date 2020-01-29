@@ -12,25 +12,22 @@ import { Restaurants } from '../models/restaurants.interface';
   styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit {
-  user: any = {
-    mail: ""
-  };
-  newItems: any[] = [];
+  user: any = null;
   email: string;
   nameButton: string = "";
   hideObject: boolean = true;
   searchTerm: string = "";
   items: any[] = [];
-  searchTermChck: boolean = false;
+  searchTermChck: boolean = null;
   filterArray: any[] = [];
-  /* edited: boolean;
-  restaurantEdited: any;*/
   priceRange: string;
+  filterActivated: boolean = false;
   constructor(public alert: AlertController, private afAuth: AuthServiceService, private router: Router, private restaurants: RestaurantsService, private route: ActivatedRoute, private fire: FirestoreService) {
     this.email = "random user";
   }
 
   ngOnInit() {
+    console.log(this.user);
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
@@ -42,6 +39,7 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.user = null;
     this.items = this.fire.removeArray();
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
@@ -57,14 +55,13 @@ export class MainPage implements OnInit {
 
   logOut() {
     sessionStorage.removeItem("userLoggedin");
-    /* sessionStorage.removeItem("itemsEditados");
-    sessionStorage.removeItem("itemsViejos");
-    sessionStorage.removeItem("itemEditado"); */
-    /* this.newItems = []; */
-    this.router.navigateByUrl("home");
     this.afAuth.signoutUser();
     this.afAuth.googleLogout();
     this.afAuth.facebookLogout();
+    this.email = "random user";
+    this.items = this.fire.removeArray();
+    this.router.navigateByUrl("main");
+    this.nameButton = "Log in";
   }
 
   logIn() {
@@ -72,83 +69,50 @@ export class MainPage implements OnInit {
   }
 
   hideOn() {
-    /*this.items = this.fire.removeArray();*/
     this.hideObject = !this.hideObject;
-    /*for (let item of this.filterArray) {
-      if (this.user.mail === item.mail) {
-        this.items.push(item);
-        this.filterArray = this.items;
-      }
-    }*/
-    //console.log(this.newItems);
     this.searchTermChck = false;
     this.searchTerm = "";
+  }
+
+  activateFilter(){
+    if(this.filterActivated === false){
+      this.filterActivated = true;
+    }
   }
 
   filterItems(){
     let arrayTest = [];
     this.items = this.fire.removeArray();
     for (let i of this.filterArray) {
-      if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
-      else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
+      if(this.filterActivated === true){
+        if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
+        else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
+      }else{
+        if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
+        else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
+      }
     }
     this.items = arrayTest;
   }
-  /*setFilteredItems() {
-    let arrayTest = [];
-    this.newItems = [];
-    console.log(this.filterArray);
-    for (let i of this.filterArray) {
-      if(i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited !== this.searchTermChck) arrayTest = [];
-      else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase() && i.visited !== this.searchTermChck) >= 0) arrayTest = [];
-      else if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
-      else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
 
-      if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
-      else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
-
-      if(this.searchTerm.trim()==="") arrayTest = [];
-
-    }
-
-    this.newItems = arrayTest;
-  }*/
-
-  /*setFilteredItems2() {
-    let arrayTest = [];
-    this.newItems = [];
-    for (let i of this.filterArray) {
-      if (i.visited === this.searchTermChck){
-        arrayTest.push(i);
-      }
-      if(i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
-      if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase() && i.visited === this.searchTermChck) >= 0) arrayTest.push(i);
-    }
-    this.newItems = arrayTest;
-  }*/
   goToEdit(item) {
     this.router.navigate(['/edit', { restaurant: JSON.stringify(item) }]);
-    /* this.edited = true;
-    sessionStorage.setItem("itemsViejos", JSON.stringify(this.newItems));
-    this.router.navigate(['/edit', { restaurant: JSON.stringify(item) }]);
-    const index = this.filterArray.findIndex(order => order.name === item.name);
-    this.filterArray.splice(index, 1);
-    this.newItems.splice(index, 1); */
-
   }
 
   resetItems(){
     this.searchTerm = "";
     this.searchTermChck = false;
+    this.filterActivated = false;
     this.items = this.filterArray;
   }
 
   deleteItem(item){
+    this.fire.removeARestaurant(item.id);
     const index = this.items.findIndex(order => order.id === item.id);
     this.items.splice(index, 1);
+    console.log(this.items);
     const index2 = this.filterArray.findIndex(order => order.name === item.name);
     this.filterArray.splice(index2, 1);
-    this.fire.removeARestaurant(item.id);
     console.log(this.items);
   }
 
@@ -169,5 +133,9 @@ export class MainPage implements OnInit {
   addItem(){
     console.log(this.email);
     this.router.navigate(['/add', { mail: JSON.stringify(this.email) }]);
+  }
+
+  goToLoginPage(){
+    this.router.navigateByUrl('home');
   }
 }
