@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { FirestoreService } from '../services/firestore.service';
 import { Restaurants } from '../models/restaurants.interface';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-main',
@@ -12,6 +13,7 @@ import { Restaurants } from '../models/restaurants.interface';
 })
 export class MainPage implements OnInit {
   user: any = null;
+  filteringItems: boolean = null;
   deleteResta: any = null;
   delete: boolean = false;
   email: string;
@@ -23,16 +25,18 @@ export class MainPage implements OnInit {
   filterArray: any[] = [];
   priceRange: string;
   filterActivated: boolean = false;
-  constructor(public alert: AlertController, private afAuth: AuthServiceService, private router: Router, private route: ActivatedRoute, private fire: FirestoreService) {
+  constructor(private toats: ToastService, private alert: AlertController, private afAuth: AuthServiceService, private router: Router, private route: ActivatedRoute, private fire: FirestoreService) {
     this.email = "random user";
   }
 
   ngOnInit() {
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
+      console.log("Hola estoy entrando en el ng on init");
       this.email = this.user.mail;
-      this.items = this.fire.getCollection(this.email);
-      this.filterArray = this.items;
+      /* this.items = this.fire.getCollection(this.email);
+      this.filterArray = this.items; */+
+        console.log(this.items);
     } else {
       this.user = {
         mail: "random user"
@@ -41,14 +45,18 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    console.log(this.items);
     this.user = null;
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
-      if(this.deleteResta === true){
+      if (this.deleteResta === true) {
         this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
+      } else if (this.items.length === 0) {
+        this.items = this.fire.getCollection(this.email);
+        this.filterArray = this.items;
       }
       this.nameButton = "Log out"
     } else {
@@ -72,25 +80,26 @@ export class MainPage implements OnInit {
   }
 
   hideOn() {
+    this.filteringItems = true;
     this.hideObject = !this.hideObject;
     this.searchTermChck = false;
     this.searchTerm = "";
   }
 
-  activateFilter(){
-    if(this.filterActivated === false){
+  activateFilter() {
+    if (this.filterActivated === false) {
       this.filterActivated = true;
     }
   }
 
-  filterItems(){
+  filterItems() {
     let arrayTest = [];
     this.items = [];
     for (let i of this.filterArray) {
-      if(this.filterActivated === true){
+      if (this.filterActivated === true) {
         if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
         else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
-      }else{
+      } else {
         if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
         else if (i.type.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) arrayTest.push(i);
       }
@@ -103,21 +112,44 @@ export class MainPage implements OnInit {
     this.deleteResta = true;
   }
 
-  resetItems(){
+  resetItems() {
     this.searchTerm = "";
     this.searchTermChck = false;
     this.filterActivated = false;
+    this.filteringItems = false;
     this.items = this.filterArray;
     console.log(this.filterArray);
   }
 
-  deleteItem(item){
-    const index2 = this.filterArray.findIndex(order => order.name === item.name);
-    this.filterArray.splice(index2, 1);
-    const index = this.items.findIndex(order => order.id === item.id);
-    this.items.splice(index, 1);
-    this.fire.removeArray();
-    this.fire.removeARestaurant(item.id);
+  async deleteItem(item) {
+    const alert = await this.alert.create({
+      header: 'Are you sure?',
+      message: "You're going to delete this restaurant, <strong>this action can't be undone</strong>",
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log("Cancel button");
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            this.filteringItems = false;
+            const index2 = this.filterArray.findIndex(order => order.name === item.name);
+            this.filterArray.splice(index2, 1);
+            const index = this.items.findIndex(order => order.id === item.id);
+            this.items.splice(index, 1);
+            this.fire.removeArray();
+            this.fire.removeARestaurant(item.id);
+            this.toats.presentToast("Your restaurant has been deleted successfully", "success", 2000);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async presentAlert() {
@@ -130,17 +162,17 @@ export class MainPage implements OnInit {
     await alert.present();
   }
 
-  helpModal(){
+  helpModal() {
     this.presentAlert();
   }
 
-  addItem(){
+  addItem() {
     console.log(this.email);
     this.router.navigate(['/add', { mail: JSON.stringify(this.email) }]);
     this.deleteResta = true;
   }
 
-  goToLoginPage(){
+  goToLoginPage() {
     this.router.navigateByUrl('home');
   }
 }

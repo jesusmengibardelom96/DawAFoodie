@@ -1,5 +1,5 @@
 ion-content{
-    --background: linear-gradient(#f04141, #f4f5f8);
+    --background: url(../../assets/fondoDawAFoodie.jpg) no-repeat center/cover fixed;
     text-align: center;
 }
 #googleLabel{
@@ -14,4 +14,7 @@ ion-content{
 .buttons{
     margin:12%;
     text-align: center;
+}
+.link{
+    color: #1e2023;
 }
