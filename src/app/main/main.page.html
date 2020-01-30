@@ -1,39 +1,32 @@
 <ion-header>
-  <ion-toolbar class="ion-text-center" color="secondary">
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
     <ion-buttons slot="start">
-      <ion-button *ngIf="this.email === 'random user';else elseBlock" (click)="logIn()">{{nameButton}}</ion-button>
+      <ion-button *ngIf="this.email === 'random user';else elseBlock" (click)="logIn()" color="danger">{{nameButton}}</ion-button>
       <ng-template #elseBlock>
-        <ion-button (click)="logOut()">{{nameButton}}</ion-button>
+        <ion-button (click)="logOut()" color="danger">{{nameButton}}</ion-button>
       </ng-template>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="this.email !== 'random user' && this.items !== null;">
-      <div *ngIf="this.items.length !== 0 || this.filteringItems !== false">
+      <div *ngIf="this.items.length !== 0 && this.filteringItems !== null">
         <ion-button (click)="hideOn()">
-          <ion-icon name="options"></ion-icon>
+          <ion-icon name="options" color="danger"></ion-icon>
         </ion-button>
       </div>
     </ion-buttons>
-    <ng-template #elseBlock3>
-      <ion-buttons slot="end">
-        <ion-button>
-          <ion-icon name="options"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ng-template>
-    <ion-title *ngIf="this.email !== 'random user' && this.items !== null; else elseBlock5">Restaurants</ion-title>
+    <ion-title *ngIf="this.email !== 'random user' && this.items !== null; else elseBlock5" color="danger">Restaurants</ion-title>
     <ng-template #elseBlock5>
-      <ion-title>DawAFoodie</ion-title>
+      <ion-title color="danger">DawAFoodie</ion-title>
     </ng-template>
   </ion-toolbar>
 </ion-header>
 
 <ion-card [hidden]="hideObject" *ngIf="this.email !== 'random user' && this.items !== null;">
-  <div *ngIf="this.items.length !== 0 || this.filteringItems !== false">
+  <div *ngIf="this.items.length !== 0 && this.filteringItems !== null">
     <ion-card-content>
       <ion-searchbar [(ngModel)]="searchTerm" placeholder="Name or Type"></ion-searchbar>
       <ion-item>
         <ion-checkbox class="check" [(ngModel)]="searchTermChck" (click)="activateFilter()"></ion-checkbox>
-        <ion-label class="labelCheck"> Visited?Y/N</ion-label>
+        <ion-label class="labelCheck"><strong> Visited?Y/N</strong></ion-label>
       </ion-item>
       <ion-button (click)="filterItems()" class="buttons">Apply</ion-button>
       <ion-button (click)="resetItems()" color="danger">Reset</ion-button>
@@ -43,17 +36,17 @@
 
 <ion-content>
   <ion-list *ngIf="this.email !== 'random user' && this.items !== null; else elseBlock2">
-    <div *ngIf="this.items.length !== 0 || this.filteringItems !== false; else elseBlock4"></div>
+    <div *ngIf="this.items.length !== 0 && this.filteringItems !== null; else elseBlock4"></div>
     <ion-item-sliding *ngFor="let item of items">
       <ion-item-options side="start">
         <ion-item-option color="secondary" (click)="goToEdit(item)">
-          <ion-icon slot="top" name="create"></ion-icon>
+          <ion-icon slot="top" name="create" class="icons"></ion-icon>
           Edit
         </ion-item-option>
       </ion-item-options>
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="deleteItem(item)">
-          <ion-icon slot="top" name="trash"></ion-icon>
+          <ion-icon slot="top" name="trash" class="icons"></ion-icon>
           Delete
         </ion-item-option>
       </ion-item-options>
@@ -80,7 +73,7 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="this.email !== 'random user' && this.items !== null;">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="this.email !== 'random user' && this.items !== null;" class="fabButton">
     <ion-fab-button color="dark">
       <ion-icon name="more"></ion-icon>
     </ion-fab-button>
@@ -96,17 +89,16 @@
   <ng-template #elseBlock2>
     <div class="labels ion-text-center">
       <ion-text>
-        <h1>Hey do you want add some restaurants?</h1><br>
-        <h1><a (click)="goToLoginPage()">LogIn</a> and let us known</h1>
+        <h1><strong>Hey do you want add some restaurants?</strong></h1><br>
+        <h1><strong><a (click)="goToLoginPage()">LogIn</a> and let us known</strong></h1>
       </ion-text>
     </div>
   </ng-template>
-  <!-- elseBlock4 -->
   <ng-template #elseBlock4>
     <div class="labels ion-text-center">
       <ion-text>
-        <h1>Hey i saw that you didn't add any restaurant?</h1><br>
-        <h1>Add it and let us known your thoughts</h1>
+        <h1><strong>Hey i saw that u didnt add any restaurants already</strong></h1><br>
+        <h1><strong>Add one and tell us your opinion</strong></h1>
       </ion-text>
     </div>
   </ng-template>

@@ -30,13 +30,14 @@ export class MainPage implements OnInit {
   }
 
   ngOnInit() {
+    this.filteringItems = null;
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
-      console.log("Hola estoy entrando en el ng on init");
+      //console.log("Hola estoy entrando en el ng on init");
       this.email = this.user.mail;
       /* this.items = this.fire.getCollection(this.email);
-      this.filterArray = this.items; */+
-        console.log(this.items);
+      this.filterArray = this.items; */
+        //console.log(this.items);
     } else {
       this.user = {
         mail: "random user"
@@ -45,12 +46,13 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    console.log(this.items);
+    //console.log(this.items);
     this.user = null;
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
       if (this.deleteResta === true) {
+        this.filteringItems = false;
         this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
@@ -80,7 +82,11 @@ export class MainPage implements OnInit {
   }
 
   hideOn() {
-    this.filteringItems = true;
+    if(this.filteringItems === false){
+      this.filteringItems = true;
+    }else{
+      this.filteringItems = false;
+    }
     this.hideObject = !this.hideObject;
     this.searchTermChck = false;
     this.searchTerm = "";
@@ -95,6 +101,7 @@ export class MainPage implements OnInit {
   filterItems() {
     let arrayTest = [];
     this.items = [];
+    
     for (let i of this.filterArray) {
       if (this.filterActivated === true) {
         if (i.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 && i.visited === this.searchTermChck) arrayTest.push(i);
@@ -105,6 +112,7 @@ export class MainPage implements OnInit {
       }
     }
     this.items = arrayTest;
+    //console.log(this.items);
   }
 
   goToEdit(item) {
@@ -118,7 +126,7 @@ export class MainPage implements OnInit {
     this.filterActivated = false;
     this.filteringItems = false;
     this.items = this.filterArray;
-    console.log(this.filterArray);
+    //console.log(this.filterArray);
   }
 
   async deleteItem(item) {
