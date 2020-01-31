@@ -7,7 +7,7 @@
       </ng-template>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="this.email !== 'random user' && this.items !== null;">
-      <div *ngIf="this.items.length !== 0 && this.filteringItems !== null">
+      <div *ngIf="this.mostrarmensajes !== true && this.filteringItems === true;">
         <ion-button (click)="hideOn()">
           <ion-icon name="options" color="danger"></ion-icon>
         </ion-button>
@@ -21,7 +21,7 @@
 </ion-header>
 
 <ion-card [hidden]="hideObject" *ngIf="this.email !== 'random user' && this.items !== null;">
-  <div *ngIf="this.items.length !== 0 && this.filteringItems !== null">
+  <div *ngIf="this.mostrarmensajes !== true;">
     <ion-card-content>
       <ion-searchbar [(ngModel)]="searchTerm" placeholder="Name or Type"></ion-searchbar>
       <ion-item>
@@ -36,7 +36,12 @@
 
 <ion-content>
   <ion-list *ngIf="this.email !== 'random user' && this.items !== null; else elseBlock2">
-    <div *ngIf="this.items.length !== 0 && this.filteringItems !== null; else elseBlock4"></div>
+    <div class="labels ion-text-center" *ngIf="this.mostrarmensajes === true">
+      <ion-text>
+        <h1><strong>Hey i saw that u didnt add any restaurants already</strong></h1><br>
+        <h1><strong>Add one and tell us your opinion</strong></h1>
+      </ion-text>
+    </div>
     <ion-item-sliding *ngFor="let item of items">
       <ion-item-options side="start">
         <ion-item-option color="secondary" (click)="goToEdit(item)">
@@ -91,14 +96,6 @@
       <ion-text>
         <h1><strong>Hey do you want add some restaurants?</strong></h1><br>
         <h1><strong><a (click)="goToLoginPage()">LogIn</a> and let us known</strong></h1>
-      </ion-text>
-    </div>
-  </ng-template>
-  <ng-template #elseBlock4>
-    <div class="labels ion-text-center">
-      <ion-text>
-        <h1><strong>Hey i saw that u didnt add any restaurants already</strong></h1><br>
-        <h1><strong>Add one and tell us your opinion</strong></h1>
       </ion-text>
     </div>
   </ng-template>

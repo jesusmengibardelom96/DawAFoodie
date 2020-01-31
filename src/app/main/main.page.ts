@@ -14,8 +14,9 @@ import { ToastService } from '../services/toast.service';
 export class MainPage implements OnInit {
   user: any = null;
   filteringItems: boolean = null;
+  mostrarmensajes:boolean = false;
   deleteResta: any = null;
-  delete: boolean = false;
+  //delete: boolean = false;
   email: string;
   nameButton: string = "";
   hideObject: boolean = true;
@@ -30,11 +31,15 @@ export class MainPage implements OnInit {
   }
 
   ngOnInit() {
-    this.filteringItems = null;
+    //this.filteringItems = null;
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       //console.log("Hola estoy entrando en el ng on init");
       this.email = this.user.mail;
+      //if(this.fire.getCollection(this.email).length === 0) this.mostrarmensajes = true;
+      console.log(this.items.length === 0);
+      if(this.items.length === 0) this.mostrarmensajes = true;
+      else this.mostrarmensajes = false;
       /* this.items = this.fire.getCollection(this.email);
       this.filterArray = this.items; */
         //console.log(this.items);
@@ -46,19 +51,27 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    //console.log(this.items);
+    
     this.user = null;
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
       if (this.deleteResta === true) {
-        this.filteringItems = false;
+        //this.filteringItems = false;
         this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
+        this.filteringItems = true;
+        this.mostrarmensajes = false;
       } else if (this.items.length === 0) {
         this.items = this.fire.getCollection(this.email);
         this.filterArray = this.items;
+        //this.mostrarmensajes = false;
+        this.filteringItems = false;
+        
+      } else if(this.items.length !== 0){
+        this.filteringItems = true;
+        console.log(this.items);
       }
       this.nameButton = "Log out"
     } else {
@@ -82,11 +95,11 @@ export class MainPage implements OnInit {
   }
 
   hideOn() {
-    if(this.filteringItems === false){
+    /*if(this.filteringItems === false){
       this.filteringItems = true;
     }else{
       this.filteringItems = false;
-    }
+    }*/
     this.hideObject = !this.hideObject;
     this.searchTermChck = false;
     this.searchTerm = "";
@@ -124,7 +137,7 @@ export class MainPage implements OnInit {
     this.searchTerm = "";
     this.searchTermChck = false;
     this.filterActivated = false;
-    this.filteringItems = false;
+    //this.filteringItems = false;
     this.items = this.filterArray;
     //console.log(this.filterArray);
   }
@@ -144,6 +157,7 @@ export class MainPage implements OnInit {
         }, {
           text: 'Okay',
           handler: () => {
+            this.mostrarmensajes = false;
             this.filteringItems = false;
             const index2 = this.filterArray.findIndex(order => order.name === item.name);
             this.filterArray.splice(index2, 1);
