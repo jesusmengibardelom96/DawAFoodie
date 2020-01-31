@@ -45,20 +45,13 @@ export class MainPage implements OnInit {
     if (this.user !== null) {
       this.email = this.user.mail;
       if (this.deleteResta === true) {
+        console.log("deleteResta funciona");
         this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
       } else if (this.items.length === 0) {
         this.items = this.fire.getCollection(this.email);
         this.filterArray = this.items;
-        setTimeout(()=>{
-          if(this.items.length === 0){
-            this.items = this.fire.removeArray();
-            this.router.navigateByUrl("no-items");
-          }else{
-            this.fire.removeArray();
-          }
-        }, 2000);
       }
       this.nameButton = "Log out"
     } else {
@@ -117,6 +110,7 @@ export class MainPage implements OnInit {
     this.searchTerm = "";
     this.searchTermChck = false;
     this.filterActivated = false;
+    this.items = this.fire.removeArray();
     this.items = this.filterArray;
   }
 
@@ -140,9 +134,7 @@ export class MainPage implements OnInit {
             const index = this.items.findIndex(order => order.id === item.id);
             this.items.splice(index, 1);
             this.fire.removeArray();
-            setTimeout(()=>{
-              this.fire.removeARestaurant(item.id);
-            }, 2000);
+            this.fire.removeARestaurant(item.id);
             this.toats.presentToast("Your restaurant has been deleted successfully", "success", 2000);
           }
         }

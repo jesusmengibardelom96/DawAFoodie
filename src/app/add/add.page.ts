@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirestoreService } from '../services/firestore.service';
 import { ToastService } from '../services/toast.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add',
@@ -9,17 +10,17 @@ import { ToastService } from '../services/toast.service';
   styleUrls: ['./add.page.scss'],
 })
 export class AddPage implements OnInit {
-  name:string= "";
-  type:string= "";
-  price:string= "";
-  district:string = "";
-  visited:boolean = false;
+  name: string = "";
+  type: string = "";
+  price: string = "";
+  district: string = "";
+  visited: boolean = false;
   comment: string = "";
   opinion: string = "";
   email: string;
-  placeHolderComment:string;
-  placeHolderOpinion:string;
-  constructor(private router : Router, private fire: FirestoreService, private route : ActivatedRoute, private toast: ToastService) { }
+  placeHolderComment: string;
+  placeHolderOpinion: string;
+  constructor(private loadingController:LoadingController, private router: Router, private fire: FirestoreService, private route: ActivatedRoute, private toast: ToastService) { }
 
   ngOnInit() {
     this.placeHolderComment = "Place your comment here...";
@@ -29,13 +30,24 @@ export class AddPage implements OnInit {
     });
     console.log(this.email);
   }
-  backMain(){
-    this.router.navigateByUrl("main");
+  async backMain() {
+    this.fire.getCollection(this.email);
+    setTimeout(() => {
+
+      if (this.fire.getCollection(this.email).length === 0) {
+        this.fire.removeArray();
+        this.router.navigateByUrl("no-items");
+      } else {
+        this.fire.removeArray();
+        this.router.navigateByUrl("main");
+      }
+    }, 2000);
+    this.presentLoader();
   }
-  sendToMain(){
-    if(this.name.trim() === "" || this.type.trim() === "" || this.price.trim() === "" || this.district.trim() === "" ){
+  sendToMain() {
+    if (this.name.trim() === "" || this.type.trim() === "" || this.price.trim() === "" || this.district.trim() === "") {
       this.toast.presentToast("You can't save a restaurant that dont have name, type, price or district, please fill the fields and try again", "danger", 5000);
-    }else{
+    } else {
       let addingRestaurants = {
         id: this.fire.createId(),
         mail: this.email,
@@ -50,8 +62,19 @@ export class AddPage implements OnInit {
         opinion: this.opinion
       };
       this.fire.createAnObject(addingRestaurants);
+      this.presentLoader();
       this.toast.presentToast("This restaurant has been successfully created ", "success", 2000);
       this.backMain();
     }
+  }
+  async presentLoader(){
+    const loading = await this.loadingController.create({
+      message: 'Loading Restaurants please wait...',
+      spinner: 'dots',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
   }
 }

@@ -5,25 +5,43 @@ import * as firebase from 'firebase/app';
 import { ToastService } from './toast.service';
 import { Router } from '@angular/router';
 import { FirestoreService } from './firestore.service';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServiceService {
 
-  constructor(public afAuth: AngularFireAuth, private toast: ToastService, private router: Router, private fire: FirestoreService) { }
+  constructor(private loadingController: LoadingController, public afAuth: AngularFireAuth, private toast: ToastService, private router: Router, private fire: FirestoreService) { }
 
   doFacebookLogin() {
     return new Promise<any>((resolve, reject) => {
       let provider = new firebase.auth.FacebookAuthProvider();
       this.afAuth.auth
         .signInWithPopup(provider)
-        .then(res => {
-          resolve(res);
+        .then(async res => {
           let user = {
             mail: res.user.email
           };
-          this.router.navigateByUrl("main");
+          this.fire.getCollection(user.mail);
+          setTimeout(()=>{
+            resolve(res);
+            if(this.fire.getCollection(user.mail).length === 0){
+              this.fire.removeArray();
+              this.router.navigateByUrl("no-items");
+            }else{
+              this.fire.removeArray();
+              this.router.navigateByUrl("main");
+            }
+          }, 2000);
+          const loading = await this.loadingController.create({
+            message: 'Login in...',
+            spinner: 'dots',
+            duration: 2000
+          });
+          await loading.present();
+      
+          const { role, data } = await loading.onDidDismiss();
           this.toast.presentToast("SignIn successful", "success", 2000);
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
           console.log(res);
@@ -41,12 +59,29 @@ export class AuthServiceService {
       provider.addScope('email');
       this.afAuth.auth
         .signInWithPopup(provider)
-        .then(res => {
+        .then(async res => {
           let user = {
             mail: res.user.email
           };
-          resolve(res);
-          this.router.navigateByUrl("main");
+          this.fire.getCollection(user.mail);
+          setTimeout(()=>{
+            resolve(res);
+            if(this.fire.getCollection(user.mail).length === 0){
+              this.fire.removeArray();
+              this.router.navigateByUrl("no-items");
+            }else{
+              this.fire.removeArray();
+              this.router.navigateByUrl("main");
+            }
+          }, 2000);
+          const loading = await this.loadingController.create({
+            message: 'Login in...',
+            spinner: 'dots',
+            duration: 2000
+          });
+          await loading.present();
+      
+          const { role, data } = await loading.onDidDismiss();
           this.toast.presentToast("SignIn successful", "success", 3000);
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
         })

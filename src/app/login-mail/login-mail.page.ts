@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthServiceService } from '../services/auth-service.service';
 import { ToastService } from '../services/toast.service';
 import { FirestoreService } from '../services/firestore.service';
@@ -13,11 +13,11 @@ export class LoginMailPage implements OnInit {
   mail: string = "";
   password: string = "";
   mensaje: string = "";
-  constructor(private router: Router, private alertController: AlertController, private afAuth: AuthServiceService, private toast: ToastService, private fire : FirestoreService) {}
+  constructor(public loadingController: LoadingController, private router: Router, private alertController: AlertController, private afAuth: AuthServiceService, private toast: ToastService, private fire: FirestoreService) { }
 
   ngOnInit() {
   }
-  async resetPassword(){
+  async resetPassword() {
     const alert = await this.alertController.create({
       header: 'Reset password',
       inputs: [
@@ -48,28 +48,44 @@ export class LoginMailPage implements OnInit {
     await alert.present();
   }
 
-  signIn(){
+  async signIn() {
     this.afAuth.loginUser(this.mail, this.password)
-    .then(() => {
-      let user = {
-        mail: this.mail,
-      };
-      if (this.fire.getCollection(user.mail).length === 0) {
-        this.router.navigateByUrl("no-items");
-      }else{
-        this.router.navigateByUrl("main");
-      }
-      sessionStorage.setItem("userLoggedin", JSON.stringify(user));
-      this.toast.presentToast("SignIn successful", "success", 3000);
-    }, error =>{
-      if(error.message.includes("email")){
-        this.mensaje = "E-mail is badly formed";
-      }else if(error.message.includes("user")){
-        this.mensaje = "The user doesn't exist, please try again";
-      }else if(error.message.includes("password")){
-        this.mensaje = "Password incorrect, please try again";
-      }
-      this.toast.presentToast(this.mensaje, "danger", 3000);
-    });
+      .then(async () => {
+        let user = {
+          mail: this.mail,
+        };
+        this.fire.getCollection(user.mail);
+        setTimeout(() => {
+
+          if (this.fire.getCollection(user.mail).length === 0) {
+            this.fire.removeArray();
+            this.router.navigateByUrl("no-items");
+          } else {
+            this.fire.removeArray();
+            this.router.navigateByUrl("main");
+          }
+        }, 2000);
+        const loading = await this.loadingController.create({
+          message: 'Login in...',
+          spinner: 'dots',
+          duration: 2000
+        });
+        await loading.present();
+
+        const { role, data } = await loading.onDidDismiss();
+
+        console.log('Loading dismissed!');
+        sessionStorage.setItem("userLoggedin", JSON.stringify(user));
+        this.toast.presentToast("SignIn successful", "success", 3000);
+      }, error => {
+        if (error.message.includes("email")) {
+          this.mensaje = "E-mail is badly formed";
+        } else if (error.message.includes("user")) {
+          this.mensaje = "The user doesn't exist, please try again";
+        } else if (error.message.includes("password")) {
+          this.mensaje = "Password incorrect, please try again";
+        }
+        this.toast.presentToast(this.mensaje, "danger", 3000);
+      });
   }
 }
