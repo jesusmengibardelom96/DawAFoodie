@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthServiceService } from '../services/auth-service.service';
 import { ToastService } from '../services/toast.service';
+import { FirestoreService } from '../services/firestore.service';
 @Component({
   selector: 'app-login-mail',
   templateUrl: './login-mail.page.html',
@@ -12,7 +13,7 @@ export class LoginMailPage implements OnInit {
   mail: string = "";
   password: string = "";
   mensaje: string = "";
-  constructor(private router: Router, private alertController: AlertController, private afAuth: AuthServiceService, private toast: ToastService) {}
+  constructor(private router: Router, private alertController: AlertController, private afAuth: AuthServiceService, private toast: ToastService, private fire : FirestoreService) {}
 
   ngOnInit() {
   }
@@ -52,10 +53,13 @@ export class LoginMailPage implements OnInit {
     .then(() => {
       let user = {
         mail: this.mail,
-        password: this.password
       };
+      if (this.fire.getCollection(user.mail).length === 0) {
+        this.router.navigateByUrl("no-items");
+      }else{
+        this.router.navigateByUrl("main");
+      }
       sessionStorage.setItem("userLoggedin", JSON.stringify(user));
-      this.router.navigateByUrl("main");
       this.toast.presentToast("SignIn successful", "success", 3000);
     }, error =>{
       if(error.message.includes("email")){

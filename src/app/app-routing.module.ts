@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'info',
     loadChildren: () => import('./info/info.module').then( m => m.InfoPageModule)
   },
+  {
+    path: 'no-items',
+    loadChildren: () => import('./no-items/no-items.module').then( m => m.NoItemsPageModule)
+  },
 ];
 
 @NgModule({

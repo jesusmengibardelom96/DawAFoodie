@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
+    <ion-buttons slot="start">
+      <ion-button *ngIf="this.email === 'random user';else elseBlock" (click)="logIn()" color="danger">{{nameButton}}</ion-button>
+      <ng-template #elseBlock>
+        <ion-button (click)="logOut()" color="danger">{{nameButton}}</ion-button>
+      </ng-template>
+    </ion-buttons>
+    <ion-title color="danger">Restaurants</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toastInfo()">
+        <ion-icon name="options" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-fab vertical="center" horizontal="center" slot="fixed">
+      <ion-fab-button (click)="addItem()" class="fabButton" color="dark">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-card-header>
+      <ion-card-title><h1>Add some restaurants</h1></ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

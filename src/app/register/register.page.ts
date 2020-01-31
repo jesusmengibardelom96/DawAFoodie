@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../services/auth-service.service';
 import { ToastService } from '../services/toast.service';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ export class RegisterPage implements OnInit {
   mail: string = "";
   password: string = "";
   mensaje: string;
-  constructor(private router: Router, private afAuth: AuthServiceService, private toast: ToastService) { }
+  constructor(private router: Router, private afAuth: AuthServiceService, private toast: ToastService, private fire: FirestoreService) { }
 
   ngOnInit() {
   }
@@ -24,12 +25,15 @@ export class RegisterPage implements OnInit {
     this.afAuth.createUser(this.mail, this.password)
     .then(() => {
       let user = {
-        mail: this.mail,
-        password: this.password
+        mail: this.mail
       };
+      if (this.fire.getCollection(user.mail).length === 0) {
+        this.router.navigateByUrl("no-items");
+      }else{
+        this.router.navigateByUrl("main");
+      }
       sessionStorage.setItem("userLoggedin", JSON.stringify(user));
       this.toast.presentToast("Your account has been created successfully", "success", 3000);
-      this.router.navigateByUrl("main");
     }, error =>{
       if(error.message.includes("account")){
         this.mensaje = "This account is already in use";

@@ -25,7 +25,20 @@ export class FirestoreService {
         })
       }
     );
-    
+
+    return this.restaurants;
+  }
+
+  getCollectionBlank(){
+    let restaurantsCollection: AngularFirestoreCollection = this.db.collection<Restaurants>('restaurants');
+    restaurantsCollection.valueChanges().subscribe(
+      res => {
+        res.forEach(element => {
+          this.restaurants.push(element.Restaurants);
+        })
+      }
+    );
+
     return this.restaurants;
   }
 

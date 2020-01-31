@@ -4,13 +4,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { ToastService } from './toast.service';
 import { Router } from '@angular/router';
+import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServiceService {
 
-  constructor(public afAuth: AngularFireAuth, private toast: ToastService, private router: Router) { }
+  constructor(public afAuth: AngularFireAuth, private toast: ToastService, private router: Router, private fire: FirestoreService) { }
 
   doFacebookLogin() {
     return new Promise<any>((resolve, reject) => {
@@ -19,10 +20,11 @@ export class AuthServiceService {
         .signInWithPopup(provider)
         .then(res => {
           resolve(res);
-          this.router.navigateByUrl("main");
           let user = {
             mail: res.user.email
           };
+          this.router.navigateByUrl("main");
+          this.toast.presentToast("SignIn successful", "success", 2000);
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
           console.log(res);
         }, err => {
@@ -40,11 +42,12 @@ export class AuthServiceService {
       this.afAuth.auth
         .signInWithPopup(provider)
         .then(res => {
-          resolve(res);
-          this.router.navigateByUrl("main");
           let user = {
             mail: res.user.email
           };
+          resolve(res);
+          this.router.navigateByUrl("main");
+          this.toast.presentToast("SignIn successful", "success", 3000);
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
         })
     })
