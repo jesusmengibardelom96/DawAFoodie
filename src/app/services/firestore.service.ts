@@ -17,7 +17,6 @@ export class FirestoreService {
   }
 
   getCollection(mail:string){
-    setTimeout(()=>{
       let restaurantsCollection: AngularFirestoreCollection = this.db.collection<Restaurants>('restaurants');
       restaurantsCollection.valueChanges().subscribe(
         res => {
@@ -26,7 +25,6 @@ export class FirestoreService {
           })
         }
       );
-    }, 5000);
     return this.restaurants;
   }
 

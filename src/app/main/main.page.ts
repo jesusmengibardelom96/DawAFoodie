@@ -49,6 +49,7 @@ export class MainPage implements OnInit {
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
       } else if (this.items.length === 0) {
+        this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.filterArray = this.items;
       }

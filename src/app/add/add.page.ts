@@ -31,15 +31,14 @@ export class AddPage implements OnInit {
     console.log(this.email);
   }
   async backMain() {
-
+    setTimeout(() => {
       if (this.fire.getCollection(this.email).length === 0) {
-        this.fire.removeArray();
         this.router.navigateByUrl("no-items");
       } else {
         this.fire.removeArray();
         this.router.navigateByUrl("main");
       }
-
+    }, 5000);
     this.presentLoader();
   }
   sendToMain() {

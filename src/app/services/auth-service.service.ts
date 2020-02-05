@@ -90,15 +90,14 @@ export class AuthServiceService {
             mail: res.user.email
           };
           sessionStorage.setItem("userLoggedin", JSON.stringify(user));
-
+          setTimeout(()=>{
             if(this.fire.getCollection(user.mail).length === 0){
-              this.fire.removeArray();
               this.router.navigateByUrl("no-items");
             }else{
               this.fire.removeArray();
               this.router.navigateByUrl("main");
             }
-
+          }, 5000);
           const loading = await this.loadingController.create({
             message: 'Login in...',
             spinner: 'dots',
