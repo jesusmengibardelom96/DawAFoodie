@@ -48,7 +48,7 @@
         </ion-item-option>
       </ion-item-options>
       <ion-item>
-        <ion-card>
+        <ion-card (click)="goToInfoPage(item)">
           <ion-card-header>
             <ion-card-subtitle>{{item.type}}</ion-card-subtitle>
             <ion-card-title>{{item.name}}</ion-card-title>

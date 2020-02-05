@@ -17,15 +17,16 @@ export class FirestoreService {
   }
 
   getCollection(mail:string){
-    let restaurantsCollection: AngularFirestoreCollection = this.db.collection<Restaurants>('restaurants');
-    restaurantsCollection.valueChanges().subscribe(
-      res => {
-        res.forEach(element => {
-          if(mail === element.Restaurants.mail)this.restaurants.push(element.Restaurants);
-        })
-      }
-    );
-
+    setTimeout(()=>{
+      let restaurantsCollection: AngularFirestoreCollection = this.db.collection<Restaurants>('restaurants');
+      restaurantsCollection.valueChanges().subscribe(
+        res => {
+          res.forEach(element => {
+            if(mail === element.Restaurants.mail)this.restaurants.push(element.Restaurants);
+          })
+        }
+      );
+    }, 5000);
     return this.restaurants;
   }
 

@@ -31,8 +31,6 @@ export class AddPage implements OnInit {
     console.log(this.email);
   }
   async backMain() {
-    this.fire.getCollection(this.email);
-    setTimeout(() => {
 
       if (this.fire.getCollection(this.email).length === 0) {
         this.fire.removeArray();
@@ -41,7 +39,7 @@ export class AddPage implements OnInit {
         this.fire.removeArray();
         this.router.navigateByUrl("main");
       }
-    }, 2000);
+
     this.presentLoader();
   }
   sendToMain() {
@@ -71,7 +69,7 @@ export class AddPage implements OnInit {
     const loading = await this.loadingController.create({
       message: 'Loading Restaurants please wait...',
       spinner: 'dots',
-      duration: 2000
+      duration: 5000
     });
     await loading.present();
 

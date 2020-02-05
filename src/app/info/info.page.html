@@ -1,9 +1,31 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>info</ion-title>
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
+    <ion-title color="danger">{{restaurant.name}} information</ion-title>
+    <ion-buttons slot="start" color="danger">
+      <ion-back-button defaultHref="main"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card class="ion-text-center">
+    <ion-card-header>
+      <ion-card-subtitle>{{restaurant.type}}</ion-card-subtitle>
+      <ion-card-title>{{restaurant.name}}</ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
+      <ion-text>
+          Price: <br>{{restaurant.priceRange}}<br>
+          District: <br>{{restaurant.district}}<br>
+          Commentary: <br>{{restaurant.comment}}<br>
+          Opinion: <br>{{restaurant.opinion}}
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addItem()" color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

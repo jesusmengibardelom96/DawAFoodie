@@ -45,7 +45,6 @@ export class MainPage implements OnInit {
     if (this.user !== null) {
       this.email = this.user.mail;
       if (this.deleteResta === true) {
-        console.log("deleteResta funciona");
         this.items = this.fire.removeArray();
         this.items = this.fire.getCollection(this.email);
         this.deleteResta = false;
@@ -159,12 +158,16 @@ export class MainPage implements OnInit {
   }
 
   addItem() {
-    console.log(this.email);
+    this.items = this.fire.removeArray();
     this.router.navigate(['/add', { mail: JSON.stringify(this.email) }]);
     this.deleteResta = true;
   }
 
   goToLoginPage() {
     this.router.navigateByUrl('home');
+  }
+
+  goToInfoPage(item: any){
+    this.router.navigate(['/info', {restaurant: JSON.stringify(item)}]);
   }
 }
