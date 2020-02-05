@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-toolbar class="ion-text-center" color="secondary">
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
     <ion-buttons slot="start">
       <ion-button (click)="backMain()">
-        <ion-icon name="arrow-round-back"></ion-icon>
+        <ion-icon name="arrow-round-back" color="danger"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Add new restaurant</ion-title>
+    <ion-title color="danger">Add new restaurant</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -54,7 +54,9 @@
     <ion-icon name="cloud-upload"></ion-icon>
     <ion-label class="inputLabels">Upload logo</ion-label>
   </ion-button>
-  <ion-button expand="block" class="buttons" color="success" (click)="sendToMain()">
-    <ion-label class="inputLabels">Save</ion-label>
-  </ion-button>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fabButton">
+    <ion-fab-button (click)="sendToMain()" color="success">
+      <ion-icon name="save" size="large"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

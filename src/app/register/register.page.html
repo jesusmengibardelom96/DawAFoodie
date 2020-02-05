@@ -1,23 +1,23 @@
 <ion-header>
-  <ion-toolbar color="danger">
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
+      <ion-back-button defaultHref="home" color="danger"></ion-back-button>
     </ion-buttons>
-    <ion-title>SignUp</ion-title>
+    <ion-title color="danger">SignUp</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-text-center">
   <ion-item class="inputs">
-    <ion-label position="floating">e-Mail</ion-label>
+    <ion-label position="floating"><strong>e-Mail</strong></ion-label>
     <ion-input type="text" placeholder="test@testMail.com" [(ngModel)] = "mail"></ion-input>
   </ion-item>
   <ion-item class="inputs">
-    <ion-label position="floating">Password</ion-label>
+    <ion-label position="floating"><strong>Password</strong></ion-label>
     <ion-input type="password" placeholder="Type your password..." [(ngModel)] = "password"></ion-input>
   </ion-item>
   <ion-button class="buttons" expand="block" (click)="signUp()">
-    <ion-label>SignUp</ion-label>
+    <ion-label>Sign Up</ion-label>
   </ion-button>
-  <ion-label>You had an account already?</ion-label><a (click)="signIn()"> SignIn here</a>
+  <ion-label><strong>You had an account already?</strong></ion-label><a (click)="signIn()"><strong> SignIn here</strong></a>
 </ion-content>

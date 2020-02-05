@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "886966994282",
+    "firebase_url": "https://dawafoodie.firebaseio.com",
+    "project_id": "dawafoodie",
+    "storage_bucket": "dawafoodie.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886966994282:android:3cf3d13ab9263ee288d113",
+        "android_client_info": {
+          "package_name": "io.ionic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886966994282-luq8s4ehtphg66gpgn8p2p6in4f7e6fa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic",
+            "certificate_hash": "1c62cd7b5a76dcc53cd928dfd24652f21c535948"
+          }
+        },
+        {
+          "client_id": "886966994282-kn7eevutf7bsgpdrelmpng8m0fqh9rka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtnVoytTeOAjJlUIU0h94IiF9XvaOjU6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886966994282-kn7eevutf7bsgpdrelmpng8m0fqh9rka.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "886966994282-2vs0i4ksglql70b3ampohmug657msajb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.ionic.start"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

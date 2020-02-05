@@ -5,9 +5,9 @@
   <ion-button class="buttons" expand="block" (click)="facebookLogIn()">
     <ion-icon name="logo-facebook"></ion-icon><ion-label id="faceLabel">SignIn with FaceBook</ion-label>
   </ion-button>
-  <p>OR</p>
+  <p class="text"><strong>OR</strong></p>
   <ion-button color="success" class="buttons" expand="block" (click)="signIn()">
     <ion-icon name="mail"></ion-icon><ion-label id="mailLabel">SignIn with Mail</ion-label>
   </ion-button>
-  <ion-label>You don't have an account?</ion-label><a (click)="signUp()"> Register here</a>
+  <ion-label class="text"><strong>You don't have an account?</strong></ion-label><a (click)="signUp()" class="link"> <strong>Register here</strong></a>
 </ion-content>

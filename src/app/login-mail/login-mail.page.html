@@ -1,23 +1,23 @@
 <ion-header>
-  <ion-toolbar color="danger" class="ion-text-center">
+  <ion-toolbar class="ion-text-center --ion-color-light-tint">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
+      <ion-back-button defaultHref="home" color="danger"></ion-back-button>
     </ion-buttons>
-    <ion-title>SignIn with mail</ion-title>
+    <ion-title color="danger">SignIn with mail</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-text-center">
   <ion-item class="inputs">
-    <ion-label position="floating">e-Mail</ion-label>
+    <ion-label position="floating"><strong>e-Mail</strong></ion-label>
     <ion-input type="text" placeholder="test@testMail.com" [(ngModel)] = "mail"></ion-input>
   </ion-item>
   <ion-item class="inputs">
-    <ion-label position="floating">Password</ion-label>
+    <ion-label position="floating"><strong>Password</strong></ion-label>
     <ion-input type="password" placeholder="Type your password..." [(ngModel)] = "password"></ion-input>
   </ion-item>
-  <a (click)="resetPassword()">Forgot your password?</a>
+  <a (click)="resetPassword()"><strong>Forgot your password?</strong></a>
   <ion-button class="buttons" expand="block" (click)="signIn()">
-    <ion-label>SignIn</ion-label>
+    <ion-label>Sign In</ion-label>
   </ion-button>
 </ion-content>

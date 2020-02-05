@@ -24,6 +24,17 @@ const routes: Routes = [
     path: 'add',
     loadChildren: () => import('./add/add.module').then( m => m.AddPageModule)
   },
+<<<<<<< HEAD
+=======
+  {
+    path: 'info',
+    loadChildren: () => import('./info/info.module').then( m => m.InfoPageModule)
+  },
+  {
+    path: 'no-items',
+    loadChildren: () => import('./no-items/no-items.module').then( m => m.NoItemsPageModule)
+  },
+>>>>>>> ed21d1834f7aaeffd5cd47451c692ea32257b0f3
 ];
 
 @NgModule({
