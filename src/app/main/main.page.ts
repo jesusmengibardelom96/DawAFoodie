@@ -41,15 +41,15 @@ export class MainPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.newItems = this.fire.removeArray();
+    this.newItems = [];
     this.filterArray = [];
     this.user = JSON.parse(sessionStorage.getItem("userLoggedin"));
     if (this.user !== null) {
       this.email = this.user.mail;
-      this.items = this.restaurants.getData();
+      this.items = this.fire.getCollection();
       for (let item of this.items) {
         if (this.user.mail === item.mail) {
-          this.newItems = this.fire.getCollection();
+          this.newItems.push(item);
           this.filterArray = this.newItems;
         }
       }
