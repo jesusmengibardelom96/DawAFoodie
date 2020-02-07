@@ -28,25 +28,6 @@ export class RegisterPage implements OnInit {
         let user = {
           mail: this.mail
         };
-        this.fire.getCollection(user.mail);
-        setTimeout(() => {
-
-          if (this.fire.getCollection(user.mail).length === 0) {
-            this.fire.removeArray();
-            this.router.navigateByUrl("no-items");
-          } else {
-            this.fire.removeArray();
-            this.router.navigateByUrl("main");
-          }
-        }, 2000);
-        const loading = await this.loadingController.create({
-          message: 'Login in...',
-          spinner: 'dots',
-          duration: 2000
-        });
-        await loading.present();
-
-        const { role, data } = await loading.onDidDismiss();
         sessionStorage.setItem("userLoggedin", JSON.stringify(user));
         this.toast.presentToast("Your account has been created successfully", "success", 3000);
       }, error => {

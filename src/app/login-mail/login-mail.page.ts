@@ -54,27 +54,13 @@ export class LoginMailPage implements OnInit {
         let user = {
           mail: this.mail,
         };
-        this.fire.getCollection(user.mail);
-        setTimeout(() => {
-
-          if (this.fire.getCollection(user.mail).length === 0) {
-            this.fire.removeArray();
-            this.router.navigateByUrl("no-items");
-          } else {
-            this.fire.removeArray();
-            this.router.navigateByUrl("main");
-          }
-        }, 2000);
         const loading = await this.loadingController.create({
           message: 'Login in...',
           spinner: 'dots',
           duration: 2000
         });
         await loading.present();
-
         const { role, data } = await loading.onDidDismiss();
-
-        console.log('Loading dismissed!');
         sessionStorage.setItem("userLoggedin", JSON.stringify(user));
         this.toast.presentToast("SignIn successful", "success", 3000);
       }, error => {
